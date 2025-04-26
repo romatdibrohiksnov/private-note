@@ -1,86 +1,122 @@
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="https://romatdibrohiksnov.github.io/private-note/style.css">
-  <script src="https://romatdibrohiksnov.github.io/private-note/jquery-3.6.0.min.js"></script>
-
+  <title>Private Note</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .form-group { margin-bottom: 10px; }
+    .form-message { width: 300px; height: 100px; }
+    .form-password { width: 200px; }
+    #generated-link { margin-top: 20px; display: none; }
+  </style>
 </head>
-
 <body>
-
   <div>
-    <h1><a href="https://romatdibrohiksnov.github.io/private-note/">private Note</a></h1>
-        <h2>New note</h2>
+    <h1>Private Note</h1>
+    <h2>New note</h2>
     <hr width="60%" align="left">
-      <form class="form" action="." method="post">
-        <fieldset class="form-group">
-          <label id="message" for="message">MESSAGE:</label>
-          <textarea name="message" placeholder="Input text here..." class="form-message" required=""></textarea>
-        </fieldset>
-        <fieldset class="form-group" id="hide">
-          <label for="password">PASSWORD:</label>
-          <input name="password" type="text" class="form-password">
-        </fieldset>
-        <div>
-          <button type="submit" class="btn">send</button>   <a href="https://romatdibrohiksnov.github.io/private-note/" id="newmsg-btn">New</a>
-        </div></form></div>
-      
-      <hr width="60%" align="left">
-      <ol>
-        <li>Create a message and click the button "send".</li>
-        <li>Copy the link</li>
-        <li>The message will be destructed after read.</li>
-      </ol>
-        
+    <form class="form" onsubmit="handleSubmit(event)">
+      <fieldset class="form-group">
+        <label>Message:</label>
+        <textarea name="message" placeholder="Enter your message here" required></textarea>
+      </fieldset>
+      <fieldset class="form-group">
+        <label>Password (optional):</label>
+        <input type="password" name="password">
+      </fieldset>
+      <button type="submit" class="btn">Create Link</button>
+    </form>
 
+    <div id="generated-link">
+      <p>Your secure link: 
+        <a id="note-url" target="_blank"></a>
+        <button onclick="copyLink()">Copy</button>
+      </p>
+    </div>
 
-
+    <hr width="60%" align="left">
+    <ol>
+      <li>THE MESSAGE WILL BE DESTRUCTED AFTER VIEW</li>
+      <li>MESSAGES THAT ARE ENCRYPTED REQUIRE THE CORRECT PASSWORD TO VIEW THE CONTENT</li>
+      <li>THE LINK CAN BE USED ONLY ONCE</li>
+    </ol>
+  </div>
 
   <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      const message = $('textarea[name="message"]').val();
+      const password = $('input[name="password"]').val();
 
-function selectText(elementId) {
+      if (!message) {
+        alert('Please enter a message');
+        return;
+      }
 
-  var doc = document,
-  text = doc.getElementById(elementId), range, selection;
-  
-  if(doc.body.createTextRange) {
-  
-    range = document.body.createTextRange();
-    range.moveToElementText(text);
-    range.select();
-    
-  } else if(window.getSelection) {
-    
-    selection = window.getSelection();
-    range = document.createRange();
-    range.selectNodeContents(text);
-    selection.removeAllRanges();
-    selection.addRange(range);
+      // 处理加密
+      let encrypted;
+      if (password) {
+        encrypted = CryptoJS.AES.encrypt(message, password).toString();
+      } else {
+        encrypted = btoa(unescape(encodeURIComponent(message)));
+      }
 
-  }
-  
-}
+      // 生成唯一链接
+      const baseUrl = window.location.href.split('#')[0];
+      const noteUrl = new URL(baseUrl);
+      noteUrl.hash = `#note=${encodeURIComponent(encrypted)}${password ? '&encrypted' : ''}`;
 
-$("#content").click(function() {
-  
-  selectText(this.id);
-  document.execCommand("copy");
+      // 显示链接
+      $('#note-url').attr('href', noteUrl.href).text(noteUrl.href);
+      $('#generated-link').show();
+      
+      // 清空表单
+      $('form')[0].reset();
+    }
 
+    function copyLink() {
+      navigator.clipboard.writeText($('#note-url').attr('href'))
+        .then(() => alert('Link copied!'))
+        .catch(() => alert('Copy failed'));
+    }
 
+    // 页面加载时检查笔记
+    $(document).ready(function() {
+      const hash = window.location.hash.substr(1);
+      if (!hash) return;
 
-});
-</script>
-<script>
- $(document).ready(function(){
-	$('#content').click(function () {
-    $('#content').toggleClass('hiddentext');
-		$('#siniy').toggleClass('bluetext');
-    
-		});
-	});
-</script>
+      const params = new URLSearchParams(hash);
+      const encrypted = params.get('note');
+      const isEncrypted = params.has('encrypted');
 
+      // 仅处理带note参数的请求
+      if (!encrypted) return;
 
+      const password = isEncrypted ? prompt('Enter password:') : '';
+      let message;
 
+      try {
+        if (isEncrypted) {
+          const bytes = CryptoJS.AES.decrypt(encrypted, password);
+          message = bytes.toString(CryptoJS.enc.Utf8);
+        } else {
+          message = decodeURIComponent(escape(atob(encrypted)));
+        }
+      } catch (e) {
+        alert('Error: Invalid password or corrupted data');
+        history.replaceState({}, '', location.pathname);
+        return;
+      }
 
-
-</body></html>
+      if (message) {
+        alert(`Secure Message:\n\n${message}`);
+        history.replaceState({}, '', location.pathname);
+      }
+    });
+  </script>
+</body>
+</html>
