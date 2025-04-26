@@ -1,0 +1,86 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+
+  <div>
+    <h1><a href="http://privatemijde3bjm5p6rmlraohv7742natbaqngyoqg3wobtpseos4qd.onion/">private Note</a></h1>
+        <h2>New note</h2>
+    <hr width="60%" align="left">
+      <form class="form" action="." method="post">
+        <fieldset class="form-group">
+          <label id="message" for="message">MESSAGE:</label>
+          <textarea name="message" placeholder="Input text here..." class="form-message" required=""></textarea>
+        </fieldset>
+        <fieldset class="form-group" id="hide">
+          <label for="password">PASSWORD:</label>
+          <input name="password" type="text" class="form-password">
+        </fieldset>
+        <div>
+          <button type="submit" class="btn">send</button>   <a href="http://privatemijde3bjm5p6rmlraohv7742natbaqngyoqg3wobtpseos4qd.onion/" id="newmsg-btn">New</a>
+        </div></form></div>
+      
+      <hr width="60%" align="left">
+      <ol>
+        <li>Create a message and click the button "send".</li>
+        <li>Copy the link</li>
+        <li>The message will be destructed after read.</li>
+      </ol>
+        
+
+
+
+
+  <script>
+
+function selectText(elementId) {
+
+  var doc = document,
+  text = doc.getElementById(elementId), range, selection;
+  
+  if(doc.body.createTextRange) {
+  
+    range = document.body.createTextRange();
+    range.moveToElementText(text);
+    range.select();
+    
+  } else if(window.getSelection) {
+    
+    selection = window.getSelection();
+    range = document.createRange();
+    range.selectNodeContents(text);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+  }
+  
+}
+
+$("#content").click(function() {
+  
+  selectText(this.id);
+  document.execCommand("copy");
+
+
+
+});
+</script>
+<script>
+ $(document).ready(function(){
+	$('#content').click(function () {
+    $('#content').toggleClass('hiddentext');
+		$('#siniy').toggleClass('bluetext');
+    
+		});
+	});
+</script>
+
+
+
+
+
+</body></html>
