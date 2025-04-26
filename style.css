@@ -1,0 +1,118 @@
+body{
+    background: #2a2a2a;
+    color: green;
+}
+
+h1{
+    color: white;
+    margin-left: 1rem;
+}
+h2{
+    margin-left: 1rem;
+}
+
+.form{
+border: 0px;
+margin-left: 1rem;
+}
+.form-group{
+    margin-left: 0rem;
+    border:0rem;
+}
+#hide{
+    display: none;
+}
+#message{
+ /*   margin-top: 0px; */
+    margin-bottom: 0px;
+}
+.form-message{
+    margin-left: 2.5rem;
+    width: 22.25rem;
+    max-width: 50rem;
+    min-width: 22rem;
+    height: 6rem;
+    max-height: 50rem;
+    min-height: 2rem;
+}
+.form-password{
+    margin-left: 1.25rem;
+    width: 30rem;
+}
+#newmsg-btn{
+    
+        display: inline-block; /* Строчно-блочный элемент */
+        background: #8C959D; /* Серый цвет фона */
+        color: #fff; /* Белый цвет текста */
+        padding: 1rem 1.5rem; /* Поля вокруг текста */
+        text-decoration: none; /* Убираем подчёркивание */
+       /*  border-radius: 3px; Скругляем уголки */
+        margin-left: 1.8rem;
+        height: 1rem;
+        width: 7rem;
+        text-align: center;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        font-size: 10pt; /* Размер шрифта в пунктах */ 
+      
+}
+#newmsg-btn-two{
+    
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 1rem 1.5rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+   /*  border-radius: 3px; Скругляем уголки */
+    margin-left: 1rem;
+    height: 1rem;
+    width: 7rem;
+    text-align: center;
+    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 10pt; /* Размер шрифта в пунктах */ 
+  
+}
+.btn{
+ 
+    margin-left: 8.7rem;
+    width: 10rem;
+    height: 3rem;
+    color:#fff;
+    background-color: #8C959D;
+
+}
+
+.link {
+    color: #ffffff;
+    text-decoration-color: #2E9AFF;
+    /* Скорость исчезновения фонового цвета */
+    transition: background-color 0.5s linear;
+  }
+  
+  .link:hover {
+    background-color: #2E9AFF;
+    /* Скорость изменения фонового цвета на голубой */
+    transition: background-color 0.1s linear;
+  }
+  .link-alert {
+    display: none;
+  }
+
+.hiddentext{
+   display: none; 
+     
+    }
+
+
+.hidden{
+        display: none; 
+}
+
+.bluetext{
+    display: block; 
+    color: blue;
+}
+    
+
+
+
+
